@@ -7,6 +7,7 @@
 #include <hyprland/src/managers/input/InputManager.hpp>
 #include <hyprland/src/render/OpenGL.hpp>
 #include <hyprland/src/render/Renderer.hpp>
+#include <hyprland/src/managers/cursor/CursorShapeOverrideController.hpp>
 #include <hyprutils/math/Box.hpp>
 
 #include "config.hpp"
@@ -83,7 +84,7 @@ void HTView::show() {
 
     layout->on_show();
 
-    g_pInputManager->setCursorImageUntilUnset("left_ptr");
+    Cursor::overrideController->setOverride("left_ptr", Cursor::CURSOR_OVERRIDE_SPECIAL_ACTION);
 
     g_pHyprRenderer->damageMonitor(monitor);
     g_pCompositor->scheduleFrameForMonitor(monitor);
@@ -108,7 +109,7 @@ void HTView::hide(bool exit_on_mouse) {
         closing = false;
     });
 
-    g_pInputManager->unsetCursorImage();
+    Cursor::overrideController->unsetOverride(Cursor::CURSOR_OVERRIDE_SPECIAL_ACTION);
 
     g_pHyprRenderer->damageMonitor(monitor);
     g_pCompositor->scheduleFrameForMonitor(monitor);
